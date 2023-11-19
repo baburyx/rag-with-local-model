@@ -162,3 +162,4 @@ cython_debug/
 .vscode/
 .streamlit/
 poetry.lock
+.DS_Store
