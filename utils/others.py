@@ -12,10 +12,11 @@ def generate_prompt(query, chat_history, context=""):
     :param context: Additional context for the query.
     :return: A formatted prompt string.
     """
-    template = """[INST] <<SYS>>You are a helpful assistant,
-A user is going to ask a question. Refer to the Related Documents below 
+
+    template = """[INST] <<SYS>>\nYou are a helpful assistant,
+A user is going to ask a question.Answer in maximum of 3 sentences. Refer to the Related Documents below 
 when answering their question. Use them as much as possible
-when answering the question. If you do not know the answer, say so.
+when answering the question. If you do not know the answer, say so. 
 
 Do not answer questions not related.
 
@@ -69,8 +70,10 @@ def format_conversation(conversation):
     conversation = conversation[-3:]
     formatted_output = []
     for item in conversation:
-        speaker = "human" if item["role"] == "user" else "ai"
-        formatted_output.append(f"{speaker}: {item['content']}")
+        if item["role"] == "user":
+            formatted_output.append(f"[INST]{item['content']}[/INST]")
+        else:
+            formatted_output.append(f"{item['content']}")
     return "\n".join(formatted_output)
 
 
@@ -78,5 +81,5 @@ def save_temp_file(file):
     temp_dir = tempfile.mkdtemp()
     path = os.path.join(temp_dir, file.name)
     with open(path, "wb") as f:
-        f.write(uploaded_file.getvalue())
+        f.write(file.getvalue())
     return path
