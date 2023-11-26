@@ -1,18 +1,9 @@
-"""
-TODO:
-1. remove uploaded files -> clear button
-4. write readme
-"""
-
-import os
-import tempfile
-
 import streamlit as st
 
+from modules import others
 from modules.chat_module import ChatHandler
 from modules.loader_module import LoaderHandler
 from modules.vectorstore_module import VectorStoreHandler
-from utils import others
 
 chat_llm = ChatHandler()
 data_loader = LoaderHandler()
@@ -31,7 +22,7 @@ if "file_uploader_key" not in st.session_state:
     st.session_state["file_uploader_key"] = 0
 if "messages" not in st.session_state:
     st.session_state.messages = []
-# current_convo = []
+
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
@@ -46,8 +37,6 @@ with st.sidebar:
     text_input = st.text_input(
         "Enter your URL here:",
         help="Enter the URL you want to chat with.",
-        # key="input_text",
-        # value=st.session_state.input_text,
     )
     files = st.file_uploader(
         "Upload your PDFs here:",
@@ -85,16 +74,13 @@ with st.sidebar:
             st.success("Data loaded! You can chat now.")
     if st.button("Reset Chat"):
         st.session_state.messages = []
-
         st.session_state["file_uploader_key"] += 1
-        st.experimental_rerun()
         if vectorstore:
             vectorstore.delete_collection()
-        st.experimental_rerun()
+        st.rerun()
 
 if user_input := st.chat_input("Hi!"):
     st.session_state.messages.append({"role": "user", "content": user_input})
-    # current_convo.append({"role": "user", "content": user_input})
 
     with st.chat_message("user"):
         st.markdown(user_input)
