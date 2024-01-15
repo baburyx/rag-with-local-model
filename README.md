@@ -39,13 +39,7 @@ Additionally, the system features a user-friendly Streamlit interface for easy i
 poetry install --no-root
 ```
 
-4. Add your OpenAI API key to environment variables:
-
-```bash
-export OPENAI_API_KEY="<your_openai_key>"
-```
-
-5. Lastly, start the application
+4. Lastly, start the application
 
 ```bash
 poetry run streamlit run app.py
